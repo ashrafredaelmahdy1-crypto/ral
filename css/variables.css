@@ -1,0 +1,90 @@
+:root {
+  /* Brand Colors — ÉMERA Olive Green Palette */
+  --primary: #0c022c;
+  --primary-light: #010425;
+  --primary-lighter: #eaf0e4;
+  --primary-dark: #020521;
+  --accent: #130129;
+  --accent-light: #d4e6bb;
+  --danger: #c0392b;
+  --danger-light: #fde8e6;
+  --warning: #c57c1a;
+  --warning-light: #fdf0d9;
+  --success: #046827;
+  --success-light: #e8f5e9;
+  --info: #020a35;
+  --info-light: #eaf0e4;
+  --purple: #6b4f2e;
+  --purple-light: #ede0d4;
+
+  /* Neutral */
+  --white: #ffffff;
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f4;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+
+  /* Sidebar */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 70px;
+  --sidebar-bg: #06032f;
+  --sidebar-item-hover: rgba(7, 3, 51, 0.08);
+  --sidebar-item-active: rgba(21, 2, 44, 0.9);
+  --sidebar-text: rgba(255, 255, 255, 0.75);
+  --sidebar-text-active: #ffffff;
+
+  /* Topbar */
+  --topbar-height: 64px;
+  --topbar-bg: #ffffff;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.15);
+
+  /* Borders */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --border-color: var(--gray-200);
+
+  /* Typography */
+  --font-main: 'Tajawal', 'Segoe UI', sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}

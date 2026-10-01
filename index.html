@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إميرا | تسجيل الدخول</title>
+  <meta name="description" content="نظام إدارة براند إميرا للملابس الطبية والمنتجات">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <style>
+    body { background: none; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     LOGIN PAGE
+════════════════════════════════════════ -->
+<div class="login-page" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="1.jpeg" alt="ÉMERA" class="login-brand-logo" style="width:300px;border-radius: 20px; height:auto;object-fit:contain;display:block;margin:0 auto;padding:var(--space-1) 0;">
+      <p>نظام إدارة البراند</p>
+    </div>
+
+    <form class="login-form" onsubmit="handleLogin(event)" autocomplete="off">
+      <div class="form-group">
+        <label class="form-label" for="password">كلمة المرور</label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="أدخل كلمة المرور..."
+          autofocus
+          required
+        >
+      </div>
+
+      <div id="login-error" class="login-error">
+        ❌ كلمة المرور غير صحيحة. حاول مجدداً.
+      </div>
+
+      <button type="submit" class="login-btn" id="login-btn">
+        الدخول إلى النظام ←
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <span id="dev-credit" title="Developed by Ashraf El Mahdy">
+        Developed by <strong>Ashraf El Mahdy</strong>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     CHANGE PASSWORD OVERLAY (secret panel)
+     Opens after 25 clicks on dev-credit
+════════════════════════════════════════ -->
+<div class="login-page" id="change-pwd-screen" style="display:none; z-index:999; position:fixed; inset:0;">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="1.jpeg" alt="ÉMERA" class="login-brand-logo">
+      <p>تغيير كلمة المرور</p>
+    </div>
+
+    <form class="login-form" onsubmit="doChangePassword(event)" autocomplete="off">
+
+      <!-- Admin secret key (always required) -->
+      <div class="form-group">
+        <label class="form-label" for="admin-key">🔑 المفتاح السري</label>
+        <input
+          type="password"
+          id="admin-key"
+          class="form-control"
+          placeholder="أدخل المفتاح السري..."
+          required
+        >
+      </div>
+
+      <!-- New password -->
+      <div class="form-group">
+        <label class="form-label" for="new-pwd">كلمة المرور الجديدة</label>
+        <input
+          type="password"
+          id="new-pwd"
+          class="form-control"
+          placeholder="أدخل كلمة المرور الجديدة..."
+          required
+        >
+      </div>
+
+      <!-- Confirm new password -->
+      <div class="form-group">
+        <label class="form-label" for="confirm-pwd">تأكيد كلمة المرور الجديدة</label>
+        <input
+          type="password"
+          id="confirm-pwd"
+          class="form-control"
+          placeholder="أعد كتابة كلمة المرور الجديدة..."
+          required
+        >
+      </div>
+
+      <!-- Feedback message -->
+      <div id="pwd-change-msg" class="login-error" style="display:none; background:var(--success-light); color:var(--success); border-color:#a5d6a7;"></div>
+
+      <button type="submit" class="login-btn" id="change-pwd-btn">
+        💾 حفظ كلمة المرور الجديدة
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <span
+        style="cursor:pointer; color:var(--gray-500); font-size:var(--text-sm)"
+        onclick="closePwdScreen()"
+      >← العودة لتسجيل الدخول</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
+<script src="js/auth.js"></script>
+<script>
+  // Redirect if already logged in
+  if (Auth.isLoggedIn()) {
+    window.location.href = 'app.html';
+  }
+
+  // ── Login ────────────────────────────────────────────────
+  function handleLogin(e) {
+    e.preventDefault();
+    const pwd = document.getElementById('password').value;
+    const btn = document.getElementById('login-btn');
+    const err = document.getElementById('login-error');
+
+    btn.textContent = '⏳ جارٍ التحقق...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      if (Auth.login(pwd)) {
+        btn.textContent = '✅ تم الدخول! جارٍ التحويل...';
+        setTimeout(() => { window.location.href = 'app.html'; }, 500);
+      } else {
+        err.style.display = 'block';
+        btn.textContent = 'الدخول إلى النظام ←';
+        btn.disabled = false;
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+      }
+    }, 400);
+  }
+
+  // ── Secret 25-click Easter egg on dev credit ────────────
+  const REQUIRED_CLICKS = 100;
+  let _clickCount = 0;
+  let _clickTimer = null;
+
+  document.getElementById('dev-credit').addEventListener('click', () => {
+    _clickCount++;
+    clearTimeout(_clickTimer);
+    // Reset if user stops for 3 seconds
+    _clickTimer = setTimeout(() => { _clickCount = 0; }, 3000);
+
+    if (_clickCount >= REQUIRED_CLICKS) {
+      _clickCount = 0;
+      openPwdScreen();
+    }
+  });
+
+  function openPwdScreen() {
+    document.getElementById('login-screen').style.display    = 'none';
+    document.getElementById('change-pwd-screen').style.display = 'flex';
+    // Clear fields
+    document.getElementById('admin-key').value   = '';
+    document.getElementById('new-pwd').value     = '';
+    document.getElementById('confirm-pwd').value = '';
+    document.getElementById('pwd-change-msg').style.display = 'none';
+    // Reset submit btn
+    const btn = document.getElementById('change-pwd-btn');
+    btn.textContent = '💾 حفظ كلمة المرور الجديدة';
+    btn.disabled = false;
+    document.getElementById('admin-key').focus();
+  }
+
+  function closePwdScreen() {
+    document.getElementById('change-pwd-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display      = 'flex';
+    document.getElementById('password').value = '';
+    document.getElementById('login-error').style.display = 'none';
+    document.getElementById('password').focus();
+  }
+
+  // ── Change password logic ────────────────────────────────
+  const ADMIN_SECRET = 'a27y5a2006';
+
+  function doChangePassword(e) {
+    e.preventDefault();
+    const adminKey   = document.getElementById('admin-key').value;
+    const newPwd     = document.getElementById('new-pwd').value;
+    const confirmPwd = document.getElementById('confirm-pwd').value;
+    const msgEl      = document.getElementById('pwd-change-msg');
+    const btn        = document.getElementById('change-pwd-btn');
+
+    function showMsg(text, success) {
+      msgEl.style.display    = 'block';
+      msgEl.style.background = success ? 'var(--success-light)' : 'var(--danger-light)';
+      msgEl.style.color      = success ? 'var(--success)'       : 'var(--danger)';
+      msgEl.style.border     = success ? '1px solid #a5d6a7'    : '1px solid #ef9a9a';
+      msgEl.textContent      = text;
+    }
+
+    // Validate admin secret key
+    if (adminKey !== ADMIN_SECRET) {
+      showMsg('❌ المفتاح السري غير صحيح', false);
+      document.getElementById('admin-key').value = '';
+      document.getElementById('admin-key').focus();
+      return;
+    }
+
+    // Validate new password length
+    if (newPwd.length < 6) {
+      showMsg('⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل', false);
+      return;
+    }
+
+    // Validate passwords match
+    if (newPwd !== confirmPwd) {
+      showMsg('❌ كلمة المرور الجديدة غير متطابقة', false);
+      return;
+    }
+
+    // All good — save new password
+    btn.textContent = '⏳ جارٍ الحفظ...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      localStorage.setItem('emera_custom_password', newPwd);
+      Auth.PASSWORD = newPwd;
+      showMsg('✅ تم تغيير كلمة المرور بنجاح!', true);
+
+      // Return to login after 2 seconds
+      setTimeout(() => closePwdScreen(), 2000);
+    }, 500);
+  }
+</script>
+</body>
+</html>
